@@ -18,7 +18,8 @@ class Distribution
      * @return float The arithmetic average of the elements of the array
      * @static
      */
-    public static function average(array $data) {
+    public static function average(array $data)
+    {
         return self::sum($data) / count($data);
     }
 
@@ -139,7 +140,8 @@ class Distribution
      * @return float The variance of the supplied array
      * @static
      */
-    public static function variance(array $data) {
+    public static function variance(array $data)
+    {
         return self::covariance($data, $data);
     }
 
@@ -153,7 +155,8 @@ class Distribution
      * @return float The population standard deviation of the supplied array
      * @static
      */
-    public static function stdDev(array $data) {
+    public static function stdDev(array $data)
+    {
         return sqrt(self::variance($data));
     }
 
@@ -168,7 +171,8 @@ class Distribution
      * @return float The covariance of the two supplied arrays
      * @static
      */
-    public static function covariance(array $datax, array $datay) {
+    public static function covariance(array $datax, array $datay)
+    {
         return self::sumXY($datax, $datay) / count($datax) - self::average($datax) * self::average($datay);
     }
 
@@ -182,47 +186,9 @@ class Distribution
      * @return float The correlation of the two supplied arrays
      * @static
      */
-    public static function correlation2($datax, $datay) {
-        return self::covariance($datax, $datay) / (self::stdDev($datax) * self::stdDev($datay));
-    }
-
-    /**
-     * Bivariante Normal Distribution ...
-     * @param $datax
-     * @param $datay
-     * @param $x
-     * @param $y
-     * @return float
-     */
-    public static function bvnd($datax, $datay, $x, $y)
+    public static function correlation2($datax, $datay)
     {
-
-        $muX = self::average($datax);
-        $muY = self::average($datay);
-
-        $sigmaX = self::stdDev($datax);
-        $sigmaX2 = pow($sigmaX, 2);
-
-        $sigmaY = self::stdDev($datay);
-        $sigmaY2 = pow($sigmaY, 2);
-
-        $p = self::correlation($datax, $datay);
-        $p2 = pow($p, 2);
-
-
-        $xMuX = $x - $muX;
-        $yMuY = $y - $muY;
-
-        $res1 = 1 / (2 * pi() * $sigmaX * $sigmaY * sqrt(1 - $p2));
-
-        $e = -1 / ( 2 * ( 1 - $p2 )) * ( (pow($xMuX, 2) / $sigmaX2 ) + ( pow($yMuY, 2 ) / $sigmaY2 ) - (( 2 * $p * $xMuX * $yMuY ) / ( $sigmaX * $sigmaY )) );
-
-        $exp = exp($e);
-
-        $res = $res1 * $exp;
-
-        return $res;
-
+        return self::covariance($datax, $datay) / (self::stdDev($datax) * self::stdDev($datay));
     }
 
 
