@@ -1,9 +1,21 @@
 <?php
+namespace mkrech\Distribution;
 
-require_once('Distribution.php');
+/**
+ *
+ * (c) M.Krech <m.krech@tisch2.de>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
 
-class BivariateNormalDistribution
+require_once('NormalDistribution.php');
+
+#use mkrech\Distribution\NormalDistribution;
+
+class BivariateNormalDistribution extends NormalDistribution
 {
+
     private $datax;
     private $datay;
     private $muX = 0;
@@ -28,16 +40,16 @@ class BivariateNormalDistribution
         $this->datax = $datax;
         $this->datay = $datay;
 
-        $this->muX = Distribution::average($this->datax);
-        $this->muY = Distribution::average($this->datay);
+        $this->muX = $this->mean($this->datax);
+        $this->muY = $this->mean($this->datay);
 
-        $this->sigmaX = Distribution::stdDev($this->datax);
+        $this->sigmaX = $this->stdDev($this->datax);
         $this->sigmaX2 = pow($this->sigmaX, 2);
 
-        $this->sigmaY = Distribution::stdDev($this->datay);
+        $this->sigmaY = $this->stdDev($this->datay);
         $this->sigmaY2 = pow($this->sigmaY, 2);
 
-        $this->p = Distribution::correlation($this->datax, $this->datay);
+        $this->p = $this->correlation($this->datax, $this->datay);
         $this->p2 = pow($this->p, 2);
     }
 
@@ -54,7 +66,7 @@ class BivariateNormalDistribution
 
         $res1 = 1 / (2 * pi() * $this->sigmaX * $this->sigmaY * sqrt(1 - $this->p2));
 
-        $e = -1 / ( 2 * ( 1 - $this->p2 )) * ( (pow($xMuX, 2) / $this->sigmaX2 ) + (pow($yMuY, 2 ) / $this->sigmaY2) - (( 2 * $this->p * $xMuX * $yMuY ) / ( $this->sigmaX * $this->sigmaY )) );
+        $e = -1 / (2 * (1 - $this->p2)) * ((pow($xMuX, 2) / $this->sigmaX2) + (pow($yMuY, 2) / $this->sigmaY2) - ((2 * $this->p * $xMuX * $yMuY) / ($this->sigmaX * $this->sigmaY)));
 
         $exp = exp($e);
 
